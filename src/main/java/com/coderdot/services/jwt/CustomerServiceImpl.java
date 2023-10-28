@@ -1,7 +1,8 @@
 package com.coderdot.services.jwt;
 
-import com.coderdot.entities.Customer;
-import com.coderdot.repository.CustomerRepository;
+
+import com.coderdot.entities.UserInfo;
+import com.coderdot.repository.UserInfoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,18 +20,18 @@ import java.util.stream.Collectors;
 @Service
 public class CustomerServiceImpl implements UserDetailsService {
 
-    private final CustomerRepository customerRepository;
+    private final UserInfoRepository userInfoRepository;
 
     @Autowired
-    public CustomerServiceImpl(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    public CustomerServiceImpl(UserInfoRepository userInfoRepository) {
+        this.userInfoRepository = userInfoRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        Customer customer = customerRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Customer not found with email: " + email));
+        UserInfo customer = userInfoRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
         List<GrantedAuthority> authorities= Arrays.stream(customer.getRoles().split(","))
                 .map(SimpleGrantedAuthority::new)

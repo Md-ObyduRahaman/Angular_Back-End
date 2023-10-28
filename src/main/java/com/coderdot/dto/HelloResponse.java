@@ -1,4 +1,13 @@
 package com.coderdot.dto;
 
-public record HelloResponse(String message) {
+import lombok.Data;
+
+@Data
+public class HelloResponse {
+
+    String msg;
+
+    public HelloResponse(String msg) {
+        this.msg = msg;
+    }
 }
