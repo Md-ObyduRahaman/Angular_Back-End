@@ -2,12 +2,12 @@ package com.coderdot.exceptions;
 
 import com.coderdot.dto.BaseResponse;
 import com.coderdot.exceptions.AppCommonException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -37,6 +37,19 @@ public class RestResponseEntityExceptionHandler
         baseResponse.status = false;
         baseResponse.errorMsg = "Login failed. Please check your credentials.";
         baseResponse.errorCode = 4042;
+        baseResponse.version="V.0.0.1";
+        baseResponse.apiName="";
+        return new ResponseEntity<Object>(
+                baseResponse, new HttpHeaders(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler({ ExpiredJwtException.class })
+    public ResponseEntity<Object> handleExpiredJwtException(
+            Exception ex, WebRequest request) {
+        BaseResponse baseResponse = new BaseResponse();
+        baseResponse.status = false;
+        baseResponse.errorMsg = "ExpiredJwtException.";
+        baseResponse.errorCode = 4043;
         baseResponse.version="V.0.0.1";
         baseResponse.apiName="";
         return new ResponseEntity<Object>(
